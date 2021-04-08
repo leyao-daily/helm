@@ -44,3 +44,6 @@ spec:
     kind: Issuer
     name: cnf-default-issuer
   secretName: cnf-default-cert
+  commonName: "*.default.pod.cluster.local"
+  dnsNames:
+  - "*.default.pod.cluster.local"
