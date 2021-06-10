@@ -31,7 +31,7 @@ nfn:
     separate: ""
 
 containers:
-  image: openwrt-1806-mwan3:v0.1
+  image: integratedcloudnative/sdewan-cnf:latest
   imagePullPolicy: IfNotPresent
   name: sdewan
 
