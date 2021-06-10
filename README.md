@@ -62,18 +62,7 @@ spec:
 ```
 - Update `helm/sdewan_cnf/values.yaml` to configure the network information
 
-**3.Install network**
-
-```
-cd network
-kubectl  apply -f calico/multus-daemonset.yaml
-kubectl  apply -f calico/calico.yaml
-kubectl  apply -f ovn4nfv/ovn-daemonset.yaml
-kubectl  apply -f ovn4nfv/ovn4nfv-k8s-plugin.yaml
-kubectl  apply -f ovn4nfv/multus-ovn-cr.yaml
-```
-
-**4.Install helm**
+**5.Install helm**
 
 ```
 curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
