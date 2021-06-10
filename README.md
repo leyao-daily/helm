@@ -1,4 +1,5 @@
 # Helm Chart for cnf and controller
+
 ## Pre-condition
 **1.Install cert-manager**
  
@@ -6,15 +7,20 @@
  
 ## Steps to install CNF and CRD Controller
 **1.Create namespace for SDEWAN Central Controller v1Microservices**
+
 `kubectl create namespace sdewan-system`
  
 **2.Generate certificate for cnf**
+
 `kubectl apply -f cert/cnf_cert.yaml`
  
 **3.Install CNF**
-`helm package sdewan_cnf`
-`helm install sdewan_cnf-0.1.0.tgz --generate-name`
- 
+
+```
+helm package sdewan_cnf
+helm install sdewan_cnf-0.1.0.tgz --generate-name
+```
+
 ### Note:
 - Create ovn-network and provider-network, e.g. 
 ```
@@ -36,8 +42,7 @@ spec:
     providerInterfaceName: eno1
     vlanId: "100"
     vlanNodeSelector: all
- 
- 
+
 ---
 apiVersion: k8s.plugin.opnfv.org/v1alpha1
 kind: Network
@@ -51,9 +56,12 @@ spec:
     name: subnet1
     gateway: 172.16.30.1/24
 ```
-- Update /sdewan_cnf/values.yaml to configure the network information
- 
+- Update `helm/sdewan_cnf/values.yaml` to configure the network information
+
 **4.Install CRD controller**
-`helm package sdewan_controllers`
-`helm install sdewan_controllers-0.1.0.tgz --generate-name`
+
+```
+helm package sdewan_controllers
+helm install sdewan_controllers-0.1.0.tgz --generate-name
+```
 
