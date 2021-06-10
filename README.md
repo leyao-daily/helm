@@ -1,22 +1,23 @@
-# helm
-### Precondition
-**1. Install cert-manager**
+# Helm Chart for cnf and controller
+## Pre-condition
+**1.Install cert-manager**
  
-`$ kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml`
+`kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml`
  
-### Steps to install CNF and CRD Controller
-**1. Create namespace for SDEWAN Central Controller v1Microservices**
-$ kubectl create namespace sdewan-system`
+## Steps to install CNF and CRD Controller
+**1.Create namespace for SDEWAN Central Controller v1Microservices**
+`kubectl create namespace sdewan-system`
  
-** 2. Generate certificate for cnf
-kubectl apply -f cert/cnf_cert.yaml
+**2.Generate certificate for cnf**
+`kubectl apply -f cert/cnf_cert.yaml`
  
-** 3.  Install CNF
-helm package sdewan_cnf
-helm install sdewan_cnf-0.1.0.tgz --generate-name
+**3.Install CNF**
+`helm package sdewan_cnf`
+`helm install sdewan_cnf-0.1.0.tgz --generate-name`
  
-Note: 
-(1) Create ovn-network and provider-network, e.g. 
+### Note:
+- Create ovn-network and provider-network, e.g. 
+```
 ---
 apiVersion: k8s.plugin.opnfv.org/v1alpha1
 kind: ProviderNetwork
@@ -49,10 +50,10 @@ spec:
   - subnet: 172.16.30.1/24
     name: subnet1
     gateway: 172.16.30.1/24
+```
+- Update /sdewan_cnf/values.yaml to configure the network information
  
-(2) Update /sdewan_cnf/values.yaml to configure the network information
- 
-** 4.  Install CRD controller
-helm package sdewan_controllers
-helm install sdewan_controllers-0.1.0.tgz --generate-name
+**4.Install CRD controller**
+`helm package sdewan_controllers`
+`helm install sdewan_controllers-0.1.0.tgz --generate-name`
 
