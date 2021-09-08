@@ -5,6 +5,7 @@
 metadata:
   name: sdewan-safe 
   namespace: default
+  # The labels need to be changed to `base` for overlay controller.
   labels: sdewan-safe
   passwdSecret: sdewan-safe-pass 
   passwd: root1
@@ -18,6 +19,7 @@ strategy:
   maxSurge: 25%
   maxUnavailable: 25%
 
+# Users can edit the following to meet their own requirements.
 nfn:
   - defaultGateway: false
     interface: net2
@@ -31,7 +33,7 @@ nfn:
     separate: ""
 
 containers:
-  image: integratedcloudnative/sdewan-cnf:latest
+  image: integratedcloudnative/sdewan-cnf:openwrt1907
   imagePullPolicy: IfNotPresent
   name: sdewan
 
