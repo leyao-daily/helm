@@ -18,4 +18,5 @@ curl <cnf_ip>:8866
 # login to the cnf pod and see the iptables
 kubectl exec -ti <cnf-pod-name> -n <namespace> -- sudo bash
 iptable -L -t nat 
+# DNAT       tcp  --  anywhere             anywhere             tcp dpt:8866 to:<nginx-svc-ip>:80
 ```
