@@ -1,4 +1,5 @@
-# This is an example which you can test your SDEWAN after finishing deploying it.
+# Example to verify
+This is an example which you can test your SDEWAN after finishing deploying it.
 
 ## Pre-condition
 **1.Install a simple nginx deployment and service**
