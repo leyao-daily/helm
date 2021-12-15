@@ -37,6 +37,9 @@ containers:
   imagePullPolicy: IfNotPresent
   name: sdewan
 
+publicIpAddress: "10.10.10.89"
+defaultCIDR: "172.16.30.0/24"
+
 nodeSelector: ""
 
 restartPolicy: Always
