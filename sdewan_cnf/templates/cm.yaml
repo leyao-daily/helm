@@ -39,21 +39,6 @@ data:
         option ipaddr '$ipaddr'
         option netmask '$netmask'
     EOF
-      cat >> /etc/config/mwan3 <<EOF
-    config interface '$vif'
-            option enabled '1'
-            option family 'ipv4'
-            option reliability '2'
-            option count '1'
-            option timeout '2'
-            option failure_latency '1000'
-            option recovery_latency '500'
-            option failure_loss '20'
-            option recovery_loss '5'
-            option interval '5'
-            option down '3'
-            option up '8'
-    EOF
     done
 
     if [ -f "/tmp/sdewan/account/password" ]; then
@@ -81,6 +66,13 @@ data:
     /etc/init.d/dropbear start
     /etc/init.d/mwan3 restart
     /etc/init.d/firewall restart
+{{- if .Values.publicIpAddress }}
+    iptables -t nat -I PREROUTING 1 -m tcp -p tcp -d {{ .Values.publicIpAddress }} --dport 6443 -j DNAT --to-dest 10.96.0.1:443
+{{- end }}
+{{- if .Values.defaultCIDR }}
+    ip rule add from {{ .Values.defaultCIDR }} lookup 40
+{{- end }}
+
     echo "Entering sleep... (success)"
     # Sleep forever.
     while true; do sleep 100; done
