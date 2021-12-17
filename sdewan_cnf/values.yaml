@@ -5,8 +5,7 @@
 metadata:
   name: sdewan-safe 
   namespace: default
-  # The labels need to be changed to `base` for overlay controller.
-  labels: sdewan-safe
+  labels: base
   passwdSecret: sdewan-safe-pass 
   passwd: root1
   cert: cnf-default-cert
@@ -19,16 +18,15 @@ strategy:
   maxSurge: 25%
   maxUnavailable: 25%
 
-# Users can edit the following to meet their own requirements.
 nfn:
   - defaultGateway: false
     interface: net2
-    ipAddress: 10.10.10.89
+    ipAddress: 10.10.70.39
     name: pnetwork
     separate: ","
   - defaultGateway: false
     interface: net0
-    ipAddress: 172.16.30.89
+    ipAddress: 172.16.70.39
     name: ovn-network
     separate: ""
 
@@ -37,9 +35,10 @@ containers:
   imagePullPolicy: IfNotPresent
   name: sdewan
 
-publicIpAddress: "10.10.10.89"
-defaultCIDR: "172.16.30.0/24"
-
 nodeSelector: ""
+
+publicIpAddress: "10.10.70.39"
+defaultCIDR: "10.233.84.0/24"
+providerCIDR: "10.10.70.0/24"
 
 restartPolicy: Always
