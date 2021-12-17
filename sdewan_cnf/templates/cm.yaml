@@ -25,6 +25,12 @@ data:
         option mmx_mask '0x3F00'
         option local_source 'lan'
     EOF
+
+    defaultip=$(grep "\podIP\b" /tmp/podinfo/annotations | cut -d/ -f2 | cut -d'"' -f2)
+    providerip=$(echo {{ .Values.providerCIDR }} | cut -d/ -f1)
+    sep="."
+    suf="0"
+
     eval "networks=$(grep nfn-network /tmp/podinfo/annotations | awk  -F '=' '{print $2}')"
     for net in $(echo -e $networks | jq -c ".interface[]")
     do
@@ -66,13 +72,21 @@ data:
     /etc/init.d/dropbear start
     /etc/init.d/mwan3 restart
     /etc/init.d/firewall restart
+    for net in $(echo -e $networks | jq -c ".interface[]")
+    do
+        interface=$(echo $net | jq -r .interface)
+        ipaddr=$(ifconfig $interface | awk '/inet/{print $2}' | cut -f2 -d ":" | awk 'NR==1 {print $1}')
+        echo $ipaddr | ( IFS="." read -r var1 var2 var3 var4; CIDR="$var1$sep$var2$sep$var3$sep$suf"; \
+            if [ "${CIDR}" = "${providerip}" ] ; then iptables -t nat -A POSTROUTING -o $interface -d {{ .Values.providerCIDR }} -j SNAT --to-source $ipaddr; fi)
+    done
+
 {{- if .Values.publicIpAddress }}
     iptables -t nat -I PREROUTING 1 -m tcp -p tcp -d {{ .Values.publicIpAddress }} --dport 6443 -j DNAT --to-dest 10.96.0.1:443
 {{- end }}
 {{- if .Values.defaultCIDR }}
     ip rule add from {{ .Values.defaultCIDR }} lookup 40
+    ip rule add from $defaultip lookup main
 {{- end }}
-
     echo "Entering sleep... (success)"
     # Sleep forever.
     while true; do sleep 100; done
