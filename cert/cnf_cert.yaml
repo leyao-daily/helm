@@ -27,7 +27,7 @@ metadata:
   name: cnf-default-issuer
   namespace: default
 spec:
-  ca: 
+  ca:
     secretName: cnf-root-cert
 
 ---

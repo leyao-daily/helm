@@ -1,4 +1,4 @@
-#/* Copyright 2020 Intel Corporation, Inc
+#/* Copyright (c) 2021 Intel Corporation, Inc
 # *
 # * Licensed under the Apache License, Version 2.0 (the "License");
 # * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ data:
     #!/bin/bash
     # Always exit on errors.
     set -ex
+    sysctl -w net.ipv4.ip_forward=1
     echo "" > /etc/config/network
     cat > /etc/config/mwan3 <<EOF
     config globals 'globals'
@@ -26,7 +27,6 @@ data:
         option local_source 'lan'
     EOF
 
-    defaultip=$(grep "\podIP\b" /tmp/podinfo/annotations | cut -d/ -f2 | cut -d'"' -f2)
     providerip=$(echo {{ .Values.providerCIDR }} | cut -d/ -f1)
     sep="."
     suf="0"
@@ -50,7 +50,7 @@ data:
     if [ -f "/tmp/sdewan/account/password" ]; then
         echo "Changing password ..."
         pass=$(cat /tmp/sdewan/account/password)
-        echo root:$pass | chpasswd
+        echo root:$pass | chpasswd -m
     fi
 
     if [ -d "/tmp/sdewan/serving-certs/" ]; then
@@ -72,6 +72,7 @@ data:
     /etc/init.d/dropbear start
     /etc/init.d/mwan3 restart
     /etc/init.d/firewall restart
+    defaultip=$(grep "\podIP\b" /tmp/podinfo/annotations | cut -d/ -f2 | cut -d'"' -f2)
     for net in $(echo -e $networks | jq -c ".interface[]")
     do
         interface=$(echo $net | jq -r .interface)
